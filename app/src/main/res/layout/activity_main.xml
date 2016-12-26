@@ -15,9 +15,4 @@
         android:layout_height="wrap_content"
         android:id="@+id/hello_world1"
         android:text="Hello World!" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/hello_world1"
-        android:text="Hello World2!" />
 </RelativeLayout>
