@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Project1</string>
+    <string name="phone_num_list">My Phone Numbers</string>
+    <string name="image_gallary">My Image Gallary</string>
+    <string name="free_topic">My Own Topic</string>
 </resources>
