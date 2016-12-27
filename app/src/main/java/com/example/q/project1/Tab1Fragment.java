@@ -28,14 +28,13 @@ public class Tab1Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-
         View view = inflater.inflate(R.layout.tab1, container, false);
-        ArrayList<String> arrayList;
         ArrayAdapter<String> adapter;
+        final JSONArray contact_list;
+        ArrayList<String> str_contact_list;
 
-        JSONArray contact_list = getContactList();
-        ArrayList<String> str_contact_list = parse_JSONArray(contact_list);
-
+        contact_list = getContactList();
+        str_contact_list = parse_JSONArray(contact_list);
         adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, str_contact_list);
 
         ListView list_view = (ListView) view.findViewById(R.id.tab1);
@@ -44,9 +43,19 @@ public class Tab1Fragment extends Fragment {
         list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                FragmentManager fm = getActivity().getSupportFragmentManager();
                 Tab1OnClickFragment dialog_fragment = new Tab1OnClickFragment();
-                dialog_fragment.show(fm, "name and phone number");
+                Bundle args = new Bundle();
+                try {
+                    JSONObject item = contact_list.getJSONObject(position);
+                    args.putString("name", item.getString("name"));
+                    System.out.println("name : " + item.getString("name"));
+                    args.putString("number", item.getString("number"));
+                    System.out.println("number : " + item.getString("number"));
+                    dialog_fragment.setArguments(args);
+                    dialog_fragment.show(getActivity().getSupportFragmentManager(), "name and phone number");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -93,7 +102,6 @@ public class Tab1Fragment extends Fragment {
         for (int i = 0; i < jarray.length(); i++) {
             try {
                 JSONObject jobject = jarray.getJSONObject(i);
-                //String str = jobject.getString("name") + " : " + jobject.getString("number");
                 String str = jobject.getString("name");
                 str_list.add(str);
             } catch (JSONException e) {
