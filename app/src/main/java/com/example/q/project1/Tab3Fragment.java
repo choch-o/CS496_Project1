@@ -17,6 +17,8 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -108,8 +110,12 @@ public class Tab3Fragment extends Fragment {
 
     public class GridAdapter extends BaseAdapter {
         private Context m_context;
+        private LayoutInflater inflater;
 
-        public GridAdapter(Context context) { m_context = context; }
+        public GridAdapter(Context context) {
+            m_context = context;
+            inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        }
 
         @Override
         public int getCount() { return images.size(); }
@@ -122,6 +128,7 @@ public class Tab3Fragment extends Fragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
+            /*
             ImageView image_view;
             if (convertView == null) {
                 // if it's not recycled, initialize some attributes
@@ -133,8 +140,26 @@ public class Tab3Fragment extends Fragment {
             }
 
             image_view.setImageBitmap(images.get(position).getImageBitmap());
+            */
 
-            return image_view;
+            if (convertView == null) {
+                convertView = inflater.inflate(R.layout.tab3_item, parent, false);
+            }
+
+            ImageView image_view = (ImageView) convertView.findViewById(R.id.tab3_image);
+            image_view.setLayoutParams(new LinearLayout.LayoutParams(350, 350));
+            image_view.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            image_view.setImageBitmap(images.get(position).getImageBitmap());
+
+            TextView text_view = (TextView) convertView.findViewById(R.id.tab3_text);
+            String[] tokens = images.get(position).getFilePath().split("/");
+            String str = tokens[tokens.length - 1];
+            if (str.length() > 12)
+                text_view.setText(str.substring(0, 6) + "... " + str.substring(str.length() - 4));
+            else
+                text_view.setText(str);
+
+            return convertView;
         }
     }
 }
