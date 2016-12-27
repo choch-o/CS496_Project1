@@ -24,9 +24,9 @@ public class Tab2Fragment extends Fragment {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-                /* Intent i = new Intent(getActivity(), );
+                Intent i = new Intent(getActivity(), ImagePreviewActivity.class);
                 i.putExtra("position", position);
-                getActivity().startActivity(i); */
+                getActivity().startActivity(i);
             }
         });
         return rootView;
