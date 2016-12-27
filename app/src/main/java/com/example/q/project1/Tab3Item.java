@@ -1,6 +1,8 @@
 package com.example.q.project1;
 
+import android.graphics.Bitmap;
 import android.media.Image;
+import android.net.Uri;
 
 import java.io.File;
 
@@ -9,21 +11,27 @@ import java.io.File;
  */
 
 public class Tab3Item {
-    private String name;
-    private String image_route;
+    private String file_path;
+    private Uri image_uri;
+    private Bitmap image_bitmap;
 
     public Tab3Item() {}
 
-    public Tab3Item(String name, String image_route) {
-        this.name = name;
-        this.image_route = image_route;
+    public Tab3Item(String file_path, Uri image_uri, Bitmap image_bitmap) {
+        this.file_path = file_path;
+        this.image_uri = image_uri;
+        this.image_bitmap = image_bitmap;
     }
 
-    public String getName() { return name; }
+    public String getFilePath() { return file_path; }
 
-    public void setName(String name) { this.name = name; }
+    public void setName(String file_path) { this.file_path = file_path; }
 
-    public String getImageRoute() { return image_route; }
+    public Uri getImageUri() { return image_uri; }
 
-    public void setImageRoute(String image_route) { this.image_route = image_route; }
+    public void setImageUri(Uri image_uri) { this.image_uri = image_uri; }
+
+    public Bitmap getImageBitmap() { return image_bitmap; }
+
+    public void setImage(Bitmap image_bitmap) { this.image_bitmap = image_bitmap; }
 }
