@@ -2,17 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <GridView
+    <ImageView
+        android:id="@+id/tab3_item"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:src="@drawable/sample_0" />
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/gridview3"
-        android:paddingTop="5dp"
-        android:columnWidth="120dp"
-        android:numColumns="auto_fit"
-        android:verticalSpacing="5dp"
-        android:stretchMode="spacingWidth"
+        android:text="A DOG"
         android:gravity="center"
-        />
-
+        android:textSize="20sp"
+        android:layout_weight="0"/>
 </LinearLayout>

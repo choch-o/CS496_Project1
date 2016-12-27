@@ -1,11 +1,14 @@
 package com.example.q.project1;
 
 
+import android.content.Context;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+
+import java.io.FileOutputStream;
 
 public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener {
     private TabLayout tabLayout;
@@ -40,6 +43,13 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
         //Adding onTabSelectedListener to swipe views
         tabLayout.addOnTabSelectedListener(this);
+
+        try {
+            FileOutputStream output_stream = openFileOutput("image_list.txt", Context.MODE_PRIVATE);
+            output_stream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
