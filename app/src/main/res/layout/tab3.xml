@@ -5,11 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <GridView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/text1"
-        android:text="@string/tab3"/>
+        android:id="@+id/gridview3"
+        android:paddingTop="5dp"
+        android:columnWidth="120dp"
+        android:numColumns="auto_fit"
+        android:verticalSpacing="5dp"
+        android:stretchMode="spacingWidth"
+        android:gravity="center"
+        />
 
     <android.support.design.widget.FloatingActionButton
         android:src="@drawable/ic_add"
