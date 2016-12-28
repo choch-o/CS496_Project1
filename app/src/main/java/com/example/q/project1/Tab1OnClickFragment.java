@@ -20,8 +20,6 @@ public class Tab1OnClickFragment extends DialogFragment {
         TextView name = (TextView) view.findViewById(R.id.tab1_onclick_name);
         TextView number = (TextView) view.findViewById(R.id.tab1_onclick_number);
         Bundle params = getArguments();
-        System.out.println("name : " + params.getString("name"));
-        System.out.println("number : " + params.getString("number"));
 
         name.setText(params.getString("name"));
         number.setText(params.getString("number"));
