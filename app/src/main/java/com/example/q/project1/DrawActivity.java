@@ -1,7 +1,9 @@
 package com.example.q.project1;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.MaskFilter;
@@ -10,6 +12,8 @@ import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.os.Bundle;
+import android.preference.DialogPreference;
+import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,6 +21,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Toast;
+
+import java.util.UUID;
 
 /**
  * Created by q on 2016-12-27.
@@ -51,15 +58,55 @@ public class DrawActivity extends Activity implements View.OnClickListener {
         blackBrush.setOnClickListener(this);
         Button eraser = (Button) findViewById(R.id.palette_eraser);
         eraser.setOnClickListener(this);
+
+        Button saveBtn = (Button) findViewById(R.id.save_btn);
+        saveBtn.setOnClickListener(this);
     }
 
     public void onClick(View v) {
-        if (v.getId() == R.id.palette_eraser) {
-            drawView.setErase(true);
+        switch (v.getId()) {
+            case R.id.palette_eraser:
+                drawView.setErase(true);
+                break;
+            case R.id.save_btn:
+                onClickSaveBtn();
+                break;
+            default:
+                drawView.setErase(false);
+                drawView.setColor(v.getTag().toString());
         }
-        else {
-            drawView.setErase(false);
-            drawView.setColor(v.getTag().toString());
-        }
+    }
+
+    public void onClickSaveBtn() {
+        AlertDialog.Builder saveDialog = new AlertDialog.Builder(this);
+        saveDialog.setTitle("Save");
+        saveDialog.setMessage("Save drawing to device Gallery?");
+        saveDialog.setPositiveButton("SAVE", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                drawView.setDrawingCacheEnabled(true);
+                // write the image to a file
+                String imageSaved = MediaStore.Images.Media.insertImage(
+                        getContentResolver(), drawView.getDrawingCache(),
+                        UUID.randomUUID().toString() + ".png", "drawing"
+                );
+                if (imageSaved != null) {
+                    Toast savedToast = Toast.makeText(getApplicationContext(),
+                            "Successfully saved!", Toast.LENGTH_SHORT);
+                    savedToast.show();
+                }
+                else {
+                    Toast unsavedToast = Toast.makeText(getApplicationContext(),
+                            "Failed to save.", Toast.LENGTH_SHORT);
+                    unsavedToast.show();
+                }
+                drawView.destroyDrawingCache();
+            }
+        });
+        saveDialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        saveDialog.show();
     }
 }
