@@ -110,11 +110,10 @@ public class Tab3Fragment extends Fragment implements View.OnClickListener {
     }
 
     public void deleteItem(int position) {
-        System.out.println("deleting position : " + position);
         images.remove(position);
-        System.out.println("length of images : " + images.size());
         grid_adapter.notifyDataSetChanged();
-        //list_adapter.notifyDataSetChanged();
+        list_adapter.notifyDataSetChanged();
+        Toast.makeText(getActivity(), "Successfully deleted!", Toast.LENGTH_LONG).show();
     }
 
     private void safeFetch() {
@@ -143,10 +142,23 @@ public class Tab3Fragment extends Fragment implements View.OnClickListener {
                     args.putSerializable("images", images);
                     args.putInt("position", position);
 
+                    String[] tokens = images.get(position).getFilePath().split("/");
+                    String str = tokens[tokens.length - 1];
+                    args.putString("name", str);
+
                     dialog_fragment.setArguments(args);
                     dialog_fragment.show(getActivity().getSupportFragmentManager(), "Deletion Alert");
 
                     return true;
+                }
+            });
+            grid_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Intent i = new Intent(getActivity(), Tab3ImagePreviewActivity.class);
+                    System.out.println(images.get(position).getFilePath());
+                    i.putExtra("file_path", images.get(position).getFilePath());
+                    getActivity().startActivity(i);
                 }
             });
 
@@ -161,6 +173,10 @@ public class Tab3Fragment extends Fragment implements View.OnClickListener {
                     args.putString("file_path", images.get(position).getFilePath());
                     args.putSerializable("images", images);
                     args.putInt("position", position);
+
+                    String[] tokens = images.get(position).getFilePath().split("/");
+                    String str = tokens[tokens.length - 1];
+                    args.putString("name", str);
 
                     dialog_fragment.setArguments(args);
                     dialog_fragment.show(getActivity().getSupportFragmentManager(), "Deletion Alert");
@@ -270,8 +286,8 @@ public class Tab3Fragment extends Fragment implements View.OnClickListener {
             TextView text_view = (TextView) convertView.findViewById(R.id.tab3_list_text);
             String[] tokens = images.get(position).getFilePath().split("/");
             String str = tokens[tokens.length - 1];
-            if (str.length() > 12)
-                text_view.setText(str.substring(0, 6) + "... " + str.substring(str.length() - 4));
+            if (str.length() > 25)
+                text_view.setText(str.substring(0, 20) + "... " + str.substring(str.length() - 4));
             else
                 text_view.setText(str);
 

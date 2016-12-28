@@ -29,7 +29,7 @@ public class Tab3OnLongClickFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        builder.setMessage("Are you sure to delete?")
+        builder.setMessage("Are you sure to delete '" + getArguments().getString("name") + "'?")
                 .setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -39,6 +39,8 @@ public class Tab3OnLongClickFragment extends DialogFragment {
                             System.out.println(fdelete.delete());
                         }
                         int pos = params.getInt("position");
+
+                        Uri image_uri = Uri.parse("file://" + params.getString("file_path"));
 
                         MainActivity calling_activity = (MainActivity) getActivity() ;
                         calling_activity.onTab3ItemDelete(params.getInt("position"));
