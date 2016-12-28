@@ -4,13 +4,16 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.MaskFilter;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.DialogPreference;
 import android.provider.MediaStore;
@@ -20,10 +23,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.util.UUID;
+
+import static java.security.AccessController.getContext;
 
 /**
  * Created by q on 2016-12-27.
@@ -33,11 +39,16 @@ public class DrawActivity extends Activity implements View.OnClickListener {
     static final int RESULT_OK = 1;
 
     private DrawingView drawView;
+    private int currPaint;
+    private ImageView currPaintView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_draw);
+
+        // Intent i = getIntent();
+
         drawView = (DrawingView)findViewById(R.id.drawing_view);
 
         Button redBrush = (Button) findViewById(R.id.palette_red);
@@ -63,12 +74,15 @@ public class DrawActivity extends Activity implements View.OnClickListener {
 
         Button saveBtn = (Button) findViewById(R.id.save_btn);
         saveBtn.setOnClickListener(this);
+
+        currPaintView = (ImageView) findViewById(R.id.curr_paint);
     }
 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.palette_eraser:
                 drawView.setErase(true);
+                currPaintView.setBackgroundColor(getResources().getColor(R.color.white));
                 break;
             case R.id.save_btn:
                 onClickSaveBtn();
@@ -76,6 +90,7 @@ public class DrawActivity extends Activity implements View.OnClickListener {
             default:
                 drawView.setErase(false);
                 drawView.setColor(v.getTag().toString());
+                currPaintView.setBackgroundColor(Color.parseColor(v.getTag().toString()));
         }
     }
 
@@ -95,7 +110,7 @@ public class DrawActivity extends Activity implements View.OnClickListener {
                     Toast savedToast = Toast.makeText(getApplicationContext(),
                             "Successfully saved!", Toast.LENGTH_SHORT);
                     savedToast.show();
-                    finishActivity(RESULT_OK);
+                    finish();
                 }
                 else {
                     Toast unsavedToast = Toast.makeText(getApplicationContext(),
