@@ -42,9 +42,11 @@ import static java.security.AccessController.getContext;
  */
 
 public class DrawActivity extends Activity implements View.OnClickListener {
-    static final int RESULT_OK = 1;
+    static final int FROM_DRAWING_ON_IMAGE = 101;
+    static final int FROM_DRAWING_NEW = 100;
 
     private FrameLayout frameLayout;
+    private boolean new_draw;
     private DrawingView drawView;
     private ImageView currPaintView;
     private ImageView backgroundView;
@@ -109,7 +111,9 @@ public class DrawActivity extends Activity implements View.OnClickListener {
             backgroundView.setLayoutParams(params);
 
             backgroundView.setImageBitmap(image_bitmap);
+            new_draw = false;
         } catch (Exception e) {
+            new_draw = true;
         }
 
         Button redBrush = (Button) findViewById(R.id.palette_red);
@@ -161,21 +165,30 @@ public class DrawActivity extends Activity implements View.OnClickListener {
         saveDialog.setMessage("Save drawing to device Gallery?");
         saveDialog.setPositiveButton("SAVE", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                // drawView.setDrawingCacheEnabled(true);
                 frameLayout.setDrawingCacheEnabled(true);
                 frameLayout.buildDrawingCache(true);
                 Bitmap captureView = frameLayout.getDrawingCache();
                 // write the image to a file
+                String file_name = UUID.randomUUID().toString();
+                System.out.println("File name : " + file_name);
                 String imageSaved = MediaStore.Images.Media.insertImage(
                         getContentResolver(), captureView,
-                        UUID.randomUUID().toString() + ".png", "drawing"
+                        file_name + ".png", "drawing"
                 );
                 if (imageSaved != null) {
                     Toast savedToast = Toast.makeText(getApplicationContext(),
                             "Successfully saved!", Toast.LENGTH_SHORT);
                     savedToast.show();
+                    Intent i = new Intent();
+                    i.putExtra("file_path", imageSaved);
+                    if (new_draw) {
+                        System.out.println("Check new");
+                        setResult(FROM_DRAWING_NEW, i);
+                    } else {
+                        System.out.println("Check old");
+                        setResult(FROM_DRAWING_ON_IMAGE, i);
+                    }
                     finish();
-
                 }
                 else {
                     Toast unsavedToast = Toast.makeText(getApplicationContext(),

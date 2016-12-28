@@ -3,6 +3,7 @@ package com.example.q.project1;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.design.widget.TabLayout;
@@ -61,6 +62,15 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == 100 || resultCode == 101) {
+            onTab3ItemAdd(data.getExtras().getString("file_path"));
+        }
+    }
+
+    @Override
     public void onTabSelected(TabLayout.Tab tab) {
         viewPager.setCurrentItem(tab.getPosition());
     }
@@ -79,8 +89,9 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         fragment.deleteItem(position);
     }
 
-    public void tab3ListToGrid(View view) {
-
+    public void onTab3ItemAdd(String file_path) {
+        Tab3Fragment fragment = (Tab3Fragment) adapter.instantiateItem(viewPager, 2);
+        fragment.addItem(file_path);
     }
 }
 
