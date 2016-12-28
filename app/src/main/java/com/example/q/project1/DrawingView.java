@@ -21,7 +21,7 @@ public class DrawingView extends View {
     private Path drawPath;
     private Paint drawPaint, canvasPaint;
     private int paintColor = 0xFF660000;
-    private Canvas drawCanvas;
+    public Canvas drawCanvas;
     private Bitmap canvasBitmap;
     private boolean erase = false;
     private Context context;
@@ -30,6 +30,7 @@ public class DrawingView extends View {
         super(c, attrs);
         context = c;
         setupDrawing();
+
     }
 
     private void setupDrawing() {
@@ -93,4 +94,6 @@ public class DrawingView extends View {
         }
         else drawPaint.setXfermode(null);
     }
+
+
 }

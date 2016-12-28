@@ -20,10 +20,14 @@ import android.os.Bundle;
 import android.preference.DialogPreference;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -40,28 +44,73 @@ import static java.security.AccessController.getContext;
 public class DrawActivity extends Activity implements View.OnClickListener {
     static final int RESULT_OK = 1;
 
+    private FrameLayout frameLayout;
     private DrawingView drawView;
-    private int currPaint;
     private ImageView currPaintView;
+    private ImageView backgroundView;
+
+    private float menuHeight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_draw);
-
+        backgroundView = (ImageView) findViewById(R.id.background_view);
         drawView = (DrawingView)findViewById(R.id.drawing_view);
-
+        frameLayout = (FrameLayout) findViewById(R.id.frame_layout);
         Intent i = getIntent();
+
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        float parentWidth = displaymetrics.widthPixels;
+        System.out.println(parentWidth);
+        float parentHeight = displaymetrics.heightPixels;
+        System.out.println(parentHeight);
+
+        final LinearLayout menuBar = (LinearLayout) findViewById(R.id.draw_menu_bar);
+        ViewTreeObserver vto = menuBar.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                menuBar.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                menuHeight = menuBar.getMeasuredHeight();
+            }
+        });
+        parentHeight = parentHeight - menuHeight;
+
         try {
             String file_path = i.getExtras().getString("file_path");
             Uri image_uri = Uri.parse("file://" + file_path);
             Bitmap image_bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), image_uri);
-            Drawable d = new BitmapDrawable(getResources(), image_bitmap);
-            drawView.setBackground(d);
+
+            float imgWidth = image_bitmap.getWidth();
+            float imgHeight = image_bitmap.getHeight();
+
+            ViewGroup.LayoutParams params = frameLayout.getLayoutParams();
+            if ((parentHeight / parentWidth) > (imgHeight / imgWidth)) {
+                params.width = (int) parentWidth;
+                params.height = (int) (imgHeight * ( parentWidth / imgWidth));
+            } else {
+                params.width = (int) (imgWidth * (parentHeight / imgHeight));
+                params.height = (int) parentHeight;
+            }
+            int frameWidth = params.width;
+            int frameHeight = params.height;
+            frameLayout.setLayoutParams(params);
+
+            params = drawView.getLayoutParams();
+            params.width = frameWidth;
+            params.height = frameHeight;
+            drawView.setLayoutParams(params);
+
+            params = backgroundView.getLayoutParams();
+            params.width = frameWidth;
+            params.height = frameHeight;
+            backgroundView.setLayoutParams(params);
+
+            backgroundView.setImageBitmap(image_bitmap);
         } catch (Exception e) {
         }
-
-
 
         Button redBrush = (Button) findViewById(R.id.palette_red);
         redBrush.setBackgroundColor(ContextCompat.getColor(this, R.color.red));
@@ -112,10 +161,13 @@ public class DrawActivity extends Activity implements View.OnClickListener {
         saveDialog.setMessage("Save drawing to device Gallery?");
         saveDialog.setPositiveButton("SAVE", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                drawView.setDrawingCacheEnabled(true);
+                // drawView.setDrawingCacheEnabled(true);
+                frameLayout.setDrawingCacheEnabled(true);
+                frameLayout.buildDrawingCache(true);
+                Bitmap captureView = frameLayout.getDrawingCache();
                 // write the image to a file
                 String imageSaved = MediaStore.Images.Media.insertImage(
-                        getContentResolver(), drawView.getDrawingCache(),
+                        getContentResolver(), captureView,
                         UUID.randomUUID().toString() + ".png", "drawing"
                 );
                 if (imageSaved != null) {
@@ -123,6 +175,7 @@ public class DrawActivity extends Activity implements View.OnClickListener {
                             "Successfully saved!", Toast.LENGTH_SHORT);
                     savedToast.show();
                     finish();
+
                 }
                 else {
                     Toast unsavedToast = Toast.makeText(getApplicationContext(),
