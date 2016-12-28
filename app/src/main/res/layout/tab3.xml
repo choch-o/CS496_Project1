@@ -9,15 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Grid View / List View" />
-    <android.support.design.widget.FloatingActionButton
-        android:src="@drawable/ic_add"
-        app:fabSize="mini"
-        android:layout_width="169dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_margin="20dp"
-        android:id="@+id/add_button" />
     <ViewFlipper
         android:id="@+id/tab3_flipper"
         android:layout_width="match_parent"
@@ -36,5 +27,15 @@
             android:id="@+id/tab3_list_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
     </ViewFlipper>
+    <android.support.design.widget.FloatingActionButton
+        android:src="@drawable/ic_add"
+        app:fabSize="mini"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="20dp"
+        android:id="@+id/add_button" />
 </RelativeLayout>

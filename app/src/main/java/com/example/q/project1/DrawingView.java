@@ -35,7 +35,7 @@ public class DrawingView extends View {
     private void setupDrawing() {
         drawPath = new Path();
         drawPaint = new Paint();
-        drawPaint.setColor(paintColor);
+        drawPaint.setColor(getResources().getColor(R.color.red));
         drawPaint.setAntiAlias(true);
         drawPaint.setStrokeWidth(20);
         drawPaint.setStyle(Paint.Style.STROKE);

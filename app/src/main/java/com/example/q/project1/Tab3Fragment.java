@@ -31,7 +31,9 @@ import java.util.zip.Inflater;
 
 // Instances of this class are fragments representing a single
 // object in our collection.
+
 public class Tab3Fragment extends Fragment implements View.OnClickListener {
+    static final int NEW_DRAWING_REQUEST = 1;
     private ArrayList<Tab3Item> images;
     private View rootView;
     private GridView grid_view;
@@ -61,7 +63,7 @@ public class Tab3Fragment extends Fragment implements View.OnClickListener {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), DrawActivity.class);
-                getActivity().startActivity(i);
+                getActivity().startActivityForResult(i, NEW_DRAWING_REQUEST);
             }
         });
 
