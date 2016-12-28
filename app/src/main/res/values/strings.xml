@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">Project1</string>
-    <string name="tab1">Tab 1</string>
-    <string name="tab2">Tab 2</string>
-    <string name="tab3">Tab 3</string>
+    <string name="app_name">CutieCats</string>
+    <string name="tab1">Tab A</string>
+    <string name="tab2">Tab B</string>
+    <string name="tab3">Tab C</string>
     <string name="save">SAVE</string>
 </resources>
