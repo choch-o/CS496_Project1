@@ -38,8 +38,10 @@ import static java.security.AccessController.getContext;
  */
 
 public class DrawActivity extends Activity implements View.OnClickListener {
-    static final int RESULT_OK = 1;
+    static final int FROM_DRAWING_ON_IMAGE = 101;
+    static final int FROM_DRAWING_NEW = 100;
 
+    private boolean new_draw;
     private DrawingView drawView;
     private int currPaint;
     private ImageView currPaintView;
@@ -58,7 +60,9 @@ public class DrawActivity extends Activity implements View.OnClickListener {
             Bitmap image_bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), image_uri);
             Drawable d = new BitmapDrawable(getResources(), image_bitmap);
             drawView.setBackground(d);
+            new_draw = false;
         } catch (Exception e) {
+            new_draw = true;
         }
 
 
@@ -114,14 +118,25 @@ public class DrawActivity extends Activity implements View.OnClickListener {
             public void onClick(DialogInterface dialog, int which) {
                 drawView.setDrawingCacheEnabled(true);
                 // write the image to a file
+                String file_name = UUID.randomUUID().toString();
+                System.out.println("File name : " + file_name);
                 String imageSaved = MediaStore.Images.Media.insertImage(
                         getContentResolver(), drawView.getDrawingCache(),
-                        UUID.randomUUID().toString() + ".png", "drawing"
+                        file_name + ".png", "drawing"
                 );
                 if (imageSaved != null) {
                     Toast savedToast = Toast.makeText(getApplicationContext(),
                             "Successfully saved!", Toast.LENGTH_SHORT);
                     savedToast.show();
+                    Intent i = new Intent();
+                    i.putExtra("file_path", imageSaved);
+                    if (new_draw) {
+                        System.out.println("Check new");
+                        setResult(FROM_DRAWING_NEW, i);
+                    } else {
+                        System.out.println("Check old");
+                        setResult(FROM_DRAWING_ON_IMAGE, i);
+                    }
                     finish();
                 }
                 else {

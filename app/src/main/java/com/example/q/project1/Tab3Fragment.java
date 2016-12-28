@@ -45,6 +45,7 @@ public class Tab3Fragment extends Fragment implements View.OnClickListener {
 
     private static final int PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 2;
     private static final int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 3;
+    static final int IMAGE_PREVIEW = 100;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -79,7 +80,8 @@ public class Tab3Fragment extends Fragment implements View.OnClickListener {
 
     private ArrayList<Tab3Item> fetchAllImages() {
         String[] projection = {
-                MediaStore.Images.Media.DATA
+                MediaStore.Images.Media.DATA,
+                MediaStore.Images.Media._ID
         };
         Cursor cursor_image = getContext().getContentResolver().query(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
@@ -88,28 +90,52 @@ public class Tab3Fragment extends Fragment implements View.OnClickListener {
         );
 
         ArrayList<Tab3Item> result = new ArrayList<>();
-        System.out.println("initial length of images : " + cursor_image.getCount());
 
-        try {
-            if (cursor_image != null) {
-                if (cursor_image.moveToFirst()) {
-                    do {
+        if (cursor_image != null) {
+            if (cursor_image.moveToFirst()) {
+                do {
+                    try {
                         String file_path = cursor_image.getString(cursor_image.getColumnIndex(projection[0]));
+                        long image_id = cursor_image.getLong(cursor_image.getColumnIndex(projection[1]));
                         Uri image_uri = Uri.parse("file://" + file_path);
                         Bitmap image_bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), image_uri);
-                        result.add(new Tab3Item(file_path, image_uri, image_bitmap));
-                    } while (cursor_image.moveToNext());
-                }
+                        Bitmap image_thumbnail = MediaStore.Images.Thumbnails.getThumbnail(getContext().getContentResolver(), image_id, MediaStore.Images.Thumbnails.MINI_KIND, null);
+                        result.add(new Tab3Item(file_path, image_uri, image_bitmap, image_thumbnail));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } while (cursor_image.moveToNext());
             }
-            cursor_image.close();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+        cursor_image.close();
+
 
         return result;
     }
 
+    public void addItem(String file_path) {
+        try {
+            System.out.println(file_path);
+            Uri image_uri_content = Uri.parse(file_path);
+            Cursor cursor = getActivity().getContentResolver().query(image_uri_content, new String[] { android.provider.MediaStore.Images.ImageColumns.DATA }, null, null, null);
+            cursor.moveToFirst();
+            file_path = cursor.getString(0);
+            cursor = getActivity().getContentResolver().query(image_uri_content, new String[] {MediaStore.Images.Media._ID}, null, null, null);
+            cursor.moveToFirst();
+            long image_id = cursor.getLong(0);
+            Uri image_uri_file = Uri.parse("file://" + file_path);
+            Bitmap image_bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), image_uri_file);
+            Bitmap image_thumbnail = MediaStore.Images.Thumbnails.getThumbnail(getContext().getContentResolver(), image_id, MediaStore.Images.Thumbnails.MINI_KIND, null);
+            images.add(new Tab3Item(file_path, image_uri_file, image_bitmap, image_thumbnail));
+            grid_adapter.notifyDataSetChanged();
+            list_adapter.notifyDataSetChanged();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void deleteItem(int position) {
+        System.out.println(images.get(position).getFilePath());
         images.remove(position);
         grid_adapter.notifyDataSetChanged();
         list_adapter.notifyDataSetChanged();
@@ -158,7 +184,7 @@ public class Tab3Fragment extends Fragment implements View.OnClickListener {
                     Intent i = new Intent(getActivity(), Tab3ImagePreviewActivity.class);
                     System.out.println(images.get(position).getFilePath());
                     i.putExtra("file_path", images.get(position).getFilePath());
-                    getActivity().startActivity(i);
+                    getActivity().startActivityForResult(i, IMAGE_PREVIEW);
                 }
             });
 
@@ -244,7 +270,7 @@ public class Tab3Fragment extends Fragment implements View.OnClickListener {
             ImageView image_view = (ImageView) convertView.findViewById(R.id.tab3_grid_image);
             image_view.setLayoutParams(new LinearLayout.LayoutParams(350, 350));
             image_view.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            image_view.setImageBitmap(images.get(position).getImageBitmap());
+            image_view.setImageBitmap(images.get(position).getImageThumbnail());
 
             TextView text_view = (TextView) convertView.findViewById(R.id.tab3_grid_text);
             String[] tokens = images.get(position).getFilePath().split("/");
@@ -290,7 +316,7 @@ public class Tab3Fragment extends Fragment implements View.OnClickListener {
 
             ImageView image_view = (ImageView) convertView.findViewById(R.id.tab3_list_image);
             image_view.setLayoutParams(new LinearLayout.LayoutParams(300, 300));
-            image_view.setImageBitmap(images.get(position).getImageBitmap());
+            image_view.setImageBitmap(images.get(position).getImageThumbnail());
 
             TextView text_view = (TextView) convertView.findViewById(R.id.tab3_list_text);
             String[] tokens = images.get(position).getFilePath().split("/");

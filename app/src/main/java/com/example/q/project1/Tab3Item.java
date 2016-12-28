@@ -14,13 +14,15 @@ public class Tab3Item {
     private String file_path;
     private Uri image_uri;
     private Bitmap image_bitmap;
+    private Bitmap image_thumbnail;
 
     public Tab3Item() {}
 
-    public Tab3Item(String file_path, Uri image_uri, Bitmap image_bitmap) {
+    public Tab3Item(String file_path, Uri image_uri, Bitmap image_bitmap, Bitmap image_thumbnail) {
         this.file_path = file_path;
         this.image_uri = image_uri;
         this.image_bitmap = image_bitmap;
+        this.image_thumbnail = image_thumbnail;
     }
 
     public String getFilePath() { return file_path; }
@@ -34,4 +36,8 @@ public class Tab3Item {
     public Bitmap getImageBitmap() { return image_bitmap; }
 
     public void setImage(Bitmap image_bitmap) { this.image_bitmap = image_bitmap; }
+
+    public Bitmap getImageThumbnail() { return image_thumbnail; }
+
+    public void setImageThumbnail(Bitmap image_thumbnail) { this.image_thumbnail = image_thumbnail; }
 }

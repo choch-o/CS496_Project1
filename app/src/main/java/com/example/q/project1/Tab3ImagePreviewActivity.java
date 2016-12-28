@@ -23,6 +23,7 @@ import static java.security.AccessController.getContext;
  */
 
 public class Tab3ImagePreviewActivity extends Activity {
+    static final int NEW_DRAWING_ON_IMAGE = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,7 @@ public class Tab3ImagePreviewActivity extends Activity {
             public void onClick(View view) {
                 Intent i = new Intent(Tab3ImagePreviewActivity.this, DrawActivity.class);
                 i.putExtra("file_path", file_path);
-                startActivity(i);
+                startActivityForResult(i, NEW_DRAWING_ON_IMAGE);
             }
         });
 
@@ -50,5 +51,12 @@ public class Tab3ImagePreviewActivity extends Activity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        setResult(resultCode, data);
+        finish();
     }
 }
