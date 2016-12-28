@@ -1,12 +1,17 @@
 package com.example.q.project1;
 
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.Toast;
 
 import java.io.FileOutputStream;
 
@@ -14,10 +19,12 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private Pager adapter;
+    private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -70,6 +77,10 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     public void onTab3ItemDelete(int position) {
         Tab3Fragment fragment = (Tab3Fragment) adapter.instantiateItem(viewPager, 2);
         fragment.deleteItem(position);
+    }
+
+    public void tab3ListToGrid(View view) {
+
     }
 }
 

@@ -9,21 +9,27 @@ import java.util.Map;
 
 public class Pager extends FragmentStatePagerAdapter {
     private int tabCount;
+    private Tab1Fragment tab1;
+    private Tab2Fragment tab2;
+    private Tab3Fragment tab3;
 
     public Pager(FragmentManager fm, int tabCount) {
         super(fm);
         this.tabCount = tabCount;
+        tab1 = new Tab1Fragment();
+        tab2 = new Tab2Fragment();
+        tab3 = new Tab3Fragment();
     }
 
     @Override
     public Fragment getItem(int i) {
         switch (i) {
             case 0:
-                return new Tab1Fragment();
+                return tab1;
             case 1:
-                return new Tab2Fragment();
+                return tab2;
             case 2:
-                return new Tab3Fragment();
+                return tab3;
             default:
                 return null;
         }

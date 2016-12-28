@@ -1,23 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <GridView
+    <Button
+        android:id="@+id/tab3_flip_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/gridview3"
-        android:paddingTop="5dp"
-        android:columnWidth="120dp"
-        android:numColumns="auto_fit"
-        android:verticalSpacing="5dp"
-        android:stretchMode="spacingWidth"
-        android:gravity="center"
-        android:layout_gravity="center"
-        />
+        android:text="Grid View / List View" />
+    <ViewFlipper
+        android:id="@+id/tab3_flipper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <GridView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tab3_grid_view"
+            android:paddingTop="5dp"
+            android:columnWidth="120dp"
+            android:numColumns="auto_fit"
+            android:verticalSpacing="5dp"
+            android:stretchMode="spacingWidth" />
+        <ListView
+            android:id="@+id/tab3_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
+    </ViewFlipper>
     <android.support.design.widget.FloatingActionButton
         android:src="@drawable/ic_add"
         app:fabSize="mini"
@@ -27,4 +37,4 @@
         android:layout_alignParentEnd="true"
         android:layout_margin="20dp"
         android:id="@+id/add_button" />
-</RelativeLayout>
+</LinearLayout>

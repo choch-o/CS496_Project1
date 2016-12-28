@@ -38,6 +38,8 @@ public class Tab3OnLongClickFragment extends DialogFragment {
                         if (fdelete.exists()) {
                             System.out.println(fdelete.delete());
                         }
+                        int pos = params.getInt("position");
+
                         MainActivity calling_activity = (MainActivity) getActivity() ;
                         calling_activity.onTab3ItemDelete(params.getInt("position"));
                     }
