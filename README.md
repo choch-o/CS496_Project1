@@ -20,4 +20,4 @@ Target Android SDK Version : 25
 
 ### Installation
 ---------------------------
-Download the [.apk](sparcs.org/~chocho/) file to your phone.
+Download the [.apk](http://35.165.2.118/~chocho/cutiecats.apk) file to your phone.
