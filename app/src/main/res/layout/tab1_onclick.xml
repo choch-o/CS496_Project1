@@ -5,14 +5,14 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="320dp"
-        android:layout_height="150dp"
+        android:layout_height="200dp"
         android:layout_gravity="center_vertical">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Contact"
             android:gravity="center_horizontal"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="20dp"
             android:textSize="20sp"/>
         <LinearLayout
             android:orientation="horizontal"
