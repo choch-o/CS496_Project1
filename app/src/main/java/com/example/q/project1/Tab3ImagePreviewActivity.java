@@ -29,14 +29,16 @@ public class Tab3ImagePreviewActivity extends Activity {
         setContentView(R.layout.activity_tab3_image_priview);
 
         Intent i = getIntent();
-        String file_path = i.getStringExtra("file_path");
+        final String file_path = i.getStringExtra("file_path");
         Uri image_uri = Uri.parse("file://" + file_path);
 
         Button button = (Button) findViewById(R.id.tab3_draw_on_image_btn);
         button.setOnClickListener(new AdapterView.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // For You!
+                Intent i = new Intent(Tab3ImagePreviewActivity.this, DrawActivity.class);
+                i.putExtra("file_path", file_path);
+                startActivity(i);
             }
         });
 

@@ -13,6 +13,8 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.DialogPreference;
@@ -47,9 +49,19 @@ public class DrawActivity extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_draw);
 
-        // Intent i = getIntent();
-
         drawView = (DrawingView)findViewById(R.id.drawing_view);
+
+        Intent i = getIntent();
+        try {
+            String file_path = i.getExtras().getString("file_path");
+            Uri image_uri = Uri.parse("file://" + file_path);
+            Bitmap image_bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), image_uri);
+            Drawable d = new BitmapDrawable(getResources(), image_bitmap);
+            drawView.setBackground(d);
+        } catch (Exception e) {
+        }
+
+
 
         Button redBrush = (Button) findViewById(R.id.palette_red);
         redBrush.setBackgroundColor(ContextCompat.getColor(this, R.color.red));
