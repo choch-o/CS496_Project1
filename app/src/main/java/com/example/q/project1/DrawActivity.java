@@ -53,22 +53,26 @@ public class DrawActivity extends Activity implements View.OnClickListener {
 
     private float menuHeight;
 
+    private float smallBrush, mediumBrush, largeBrush;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_draw);
+
+        // Find views
         backgroundView = (ImageView) findViewById(R.id.background_view);
         drawView = (DrawingView)findViewById(R.id.drawing_view);
         frameLayout = (FrameLayout) findViewById(R.id.frame_layout);
         Intent i = getIntent();
 
+        // Get screen width and height
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
         float parentWidth = displaymetrics.widthPixels;
-        System.out.println(parentWidth);
         float parentHeight = displaymetrics.heightPixels;
-        System.out.println(parentHeight);
 
+        // Get menu bar height
         final LinearLayout menuBar = (LinearLayout) findViewById(R.id.draw_menu_bar);
         ViewTreeObserver vto = menuBar.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -80,6 +84,7 @@ public class DrawActivity extends Activity implements View.OnClickListener {
         });
         parentHeight = parentHeight - menuHeight;
 
+        // adjust image size
         try {
             String file_path = i.getExtras().getString("file_path");
             Uri image_uri = Uri.parse("file://" + file_path);
@@ -113,6 +118,7 @@ public class DrawActivity extends Activity implements View.OnClickListener {
             backgroundView.setImageBitmap(image_bitmap);
             new_draw = false;
         } catch (Exception e) {
+            drawView.setBackgroundColor(getResources().getColor(R.color.white));
             new_draw = true;
         }
 
@@ -141,6 +147,10 @@ public class DrawActivity extends Activity implements View.OnClickListener {
         saveBtn.setOnClickListener(this);
 
         currPaintView = (ImageView) findViewById(R.id.curr_paint);
+
+        smallBrush = getResources().getInteger(R.integer.small_size);
+        mediumBrush = getResources().getInteger(R.integer.medium_size);
+        largeBrush = getResources().getInteger(R.integer.large_size);
     }
 
     public void onClick(View v) {
@@ -148,12 +158,14 @@ public class DrawActivity extends Activity implements View.OnClickListener {
             case R.id.palette_eraser:
                 drawView.setErase(true);
                 currPaintView.setBackgroundColor(getResources().getColor(R.color.white));
+                drawView.setBrushSize(250);
                 break;
             case R.id.save_btn:
                 onClickSaveBtn();
                 break;
             default:
                 drawView.setErase(false);
+                drawView.setBrushSize(20);
                 drawView.setColor(v.getTag().toString());
                 currPaintView.setBackgroundColor(Color.parseColor(v.getTag().toString()));
         }

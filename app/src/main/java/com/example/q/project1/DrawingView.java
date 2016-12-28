@@ -10,6 +10,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -30,7 +31,6 @@ public class DrawingView extends View {
         super(c, attrs);
         context = c;
         setupDrawing();
-
     }
 
     private void setupDrawing() {
@@ -95,5 +95,8 @@ public class DrawingView extends View {
         else drawPaint.setXfermode(null);
     }
 
+    public void setBrushSize(float brushSize) {
+        drawPaint.setStrokeWidth(brushSize);
+    }
 
 }
