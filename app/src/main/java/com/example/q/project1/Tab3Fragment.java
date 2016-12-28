@@ -31,13 +31,9 @@ import java.util.zip.Inflater;
 
 // Instances of this class are fragments representing a single
 // object in our collection.
-<<<<<<< HEAD
-public class Tab3Fragment extends Fragment {
-    static final int NEW_DRAWING_REQUEST = 1;
 
-=======
 public class Tab3Fragment extends Fragment implements View.OnClickListener {
->>>>>>> 409fbb43e3c968a3a809b7acae0c3d5a102bbbad
+    static final int NEW_DRAWING_REQUEST = 1;
     private ArrayList<Tab3Item> images;
     private View rootView;
     private GridView grid_view;
