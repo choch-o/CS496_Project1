@@ -182,6 +182,15 @@ public class Tab3Fragment extends Fragment implements View.OnClickListener {
                     return true;
                 }
             });
+            list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Intent i = new Intent(getActivity(), Tab3ImagePreviewActivity.class);
+                    System.out.println(images.get(position).getFilePath());
+                    i.putExtra("file_path", images.get(position).getFilePath());
+                    getActivity().startActivity(i);
+                }
+            });
         }
     }
 

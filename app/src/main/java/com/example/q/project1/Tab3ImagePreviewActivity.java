@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -32,7 +33,7 @@ public class Tab3ImagePreviewActivity extends Activity {
         String file_path = i.getStringExtra("file_path");
         Uri image_uri = Uri.parse("file://" + file_path);
 
-        Button button = (Button) findViewById(R.id.tab3_draw_on_image_btn);
+        FloatingActionButton button = (FloatingActionButton) findViewById(R.id.tab3_draw_on_image_btn);
         button.setOnClickListener(new AdapterView.OnClickListener() {
             @Override
             public void onClick(View view) {
