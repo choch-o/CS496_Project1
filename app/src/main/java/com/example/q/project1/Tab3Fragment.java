@@ -26,6 +26,8 @@ import java.util.ArrayList;
 // Instances of this class are fragments representing a single
 // object in our collection.
 public class Tab3Fragment extends Fragment {
+    static final int NEW_DRAWING_REQUEST = 1;
+
     private ArrayList<Tab3Item> images;
     private GridAdapter grid_adapter;
 
@@ -41,7 +43,7 @@ public class Tab3Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), DrawActivity.class);
-                getActivity().startActivity(i);
+                getActivity().startActivityForResult(i, NEW_DRAWING_REQUEST);
             }
         });
 

@@ -30,6 +30,8 @@ import java.util.UUID;
  */
 
 public class DrawActivity extends Activity implements View.OnClickListener {
+    static final int RESULT_OK = 1;
+
     private DrawingView drawView;
 
     @Override
@@ -93,6 +95,7 @@ public class DrawActivity extends Activity implements View.OnClickListener {
                     Toast savedToast = Toast.makeText(getApplicationContext(),
                             "Successfully saved!", Toast.LENGTH_SHORT);
                     savedToast.show();
+                    finishActivity(RESULT_OK);
                 }
                 else {
                     Toast unsavedToast = Toast.makeText(getApplicationContext(),
